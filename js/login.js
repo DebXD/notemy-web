@@ -1,4 +1,4 @@
-// JavaScript
+
 let token;
 
 const fetchToken = (loginCredentials, getNotes) => {
@@ -23,9 +23,7 @@ function sleep(ms){
     };
 
 const getMe = async (accessToken) => {
-    // let accessToken = fetchToken()
-    // console.log(accessToken);
-    //let accessToken = setTimeout(fetchToken();
+
     await fetch("https://notemy-api.deta.dev/api/v1/auth/me/",{
         method : 'GET',
         headers : {
@@ -59,6 +57,8 @@ const getMe = async (accessToken) => {
             console.log(items)
             
             window.location.href = './notes.html'
+            localStorage.setItem("token", accessToken);
+            console.log(localStorage.getItem("token"));
             
         })
         
@@ -71,14 +71,15 @@ loginBtn.addEventListener('click', () =>{
     const inputEmail = document.getElementById('inputEmail').value;
     const inputPassword = document.getElementById('inputPassword').value;
 
-    loginCredentials = {
+    const loginCredentials = {
         email: inputEmail,
         password: inputPassword
     };
     console.log(loginCredentials)
 
     fetchToken(loginCredentials, getMe)
+    
 
 })
 
-// export {token};
+
