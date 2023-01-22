@@ -12,7 +12,7 @@ const fetchToken = (loginCredentials, getNotes) => {
     .then(response =>   response.json())
     .then(data => {
         token = data['user']['access token'];
-        console.log(token)
+        //console.log(token)
         getMe(token);
     });
 };
@@ -32,7 +32,7 @@ const getMe = async (accessToken) => {
         })
         .then(res => {
             if (res.status == 200){
-            console.log('getting notes json data')
+            //console.log('getting notes json data')
             Swal.fire(
                 'Good job!',
                 'You have logged in.',
@@ -49,16 +49,18 @@ const getMe = async (accessToken) => {
         })  
         
         .then( data => {
-            console.log(data);
+            //console.log(data);
             return data.data;
         })
         
         .then( items => {
-            console.log(items)
+            //console.log(items)
             
             window.location.href = './notes.html'
-            localStorage.setItem("token", accessToken);
-            console.log(localStorage.getItem("token"));
+            //localStorage.setItem("token", accessToken);
+            // Set cookie
+            document.cookie= `token=${accessToken}`;
+            //console.log(localStorage.getItem("token"));
             
         })
         

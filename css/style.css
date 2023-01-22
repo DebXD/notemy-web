@@ -1,4 +1,14 @@
+*{
+  font-family: 'Poppins', sans-serif;
+}
 
 .card-title{
-  font-weight: 600;
+  font-weight: 590;
+  font-size : 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.add-notes{
+  text-align : center;
+  padding : 5px; 
 }

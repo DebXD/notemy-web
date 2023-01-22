@@ -1,4 +1,19 @@
-let token = localStorage.getItem("token");
+// let token = localStorage.getItem("token");
+//  Get token from cookie items
+const cookieItems = document.cookie.split(';')
+const getToken = () => {
+    for (let i=0; i<cookieItems.length; i++){
+            let item = cookieItems[i]
+        if (item.includes('token')){
+            let tokenArray = item.split('=');
+            if (tokenArray[1] != undefined){
+                return tokenArray[1];
+            }
+        }
+    }
+}
+const token  = getToken();
+console.log(token)
 
 const notesContainer = document.getElementById("note-container")
 
