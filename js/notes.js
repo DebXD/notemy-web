@@ -1,9 +1,9 @@
 // Get token from cookie items
 const cookieItems = document.cookie.split(';')
-const getToken = async() => {
+const getToken = async(cookieItemName) => {
     for (let i=0; i<cookieItems.length; i++){
             let item = await cookieItems[i]
-        if (item.includes('token')){
+        if (item.includes(cookieItemName)){
             let tokenArray = await item.split('=');
             if (tokenArray[1] != undefined){
                 return tokenArray[1];
@@ -72,19 +72,25 @@ async function getNotesList(token, page){
 }
 
 async function run(){
-    let token  = await getToken();
-    if (!token){
+    let accessToken  = await getToken('access_token');
+    let refreshToken = await getToken('refresh_token');
+    if (!accessToken){
         await Swal.fire(
             'Logged out',
             'Login again.',
             'error'
           );
+          try {
+            
+          } catch (error) {
+            
+          }
         window.location.href = './login.html'
         console.log("token is null")
     }
     else{
          
-        getNotesList(token, page);
+        getNotesList(accessToken, page);
     
     
     }
