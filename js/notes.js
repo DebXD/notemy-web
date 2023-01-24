@@ -20,42 +20,47 @@ const notesContainer = document.getElementById("note-container");
 
 let page = 1;
 
-async function getNotesList(token, page){
-    let notesList = [];
-    while (page){
-        let endpoint = `https://notemy-api.deta.dev/api/v1/notes/?page=${page}`;
-        const response = await fetch(endpoint,{
-            method: 'GET',
-            headers: {"Authorization" : "Bearer " + token}});
-        if (response.status == 200){
-            const data = await response.json();
-            const arrayData = data.data;
+async function getNotesList(accessToken,refreshToken, page){
+    try {
+        let notesList = [];
+        while (page){
+            let endpoint = `https://notemy-api.deta.dev/api/v1/notes/?page=${page}`;
+            const response = await fetch(endpoint,{
+                method: 'GET',
+                headers: {"Authorization" : "Bearer " + accessToken}});
+            if (response.status == 200){
+                const data = await response.json();
+                const arrayData = data.data;
 
-            for (let i=0; i<5; i++){
-                if (arrayData[i]!== undefined){
-                notesList.push(arrayData[i]);
+                for (let i=0; i<5; i++){
+                    if (arrayData[i]!== undefined){
+                    notesList.push(arrayData[i]);
+                    }
                 }
-            }
-            const meta = data.meta;
-            if (meta['has_next'] == false){
-                break;
-            }
+                const meta = data.meta;
+                if (meta['has_next'] == false){
+                    break;
+                }
             
-            page ++;
-        }
+                page ++;
+            }
         else{
-            window.location.href = './login.html'
-        }
-    }
-    
-    //console.log(notesList)
+            
+            let result = refreshAccessToken(refreshToken)
+            if (result != true){
+                window.location.href = './login.html';
+            }
+            else{
+                location.reload();
+            break;
+        }}
 
-    if (notesList.length !== 0){
-        let htmlString = ''
-        for (let i=0; i<notesList.length; i++){
+        if (notesList.length !== 0){
+            let htmlString = ''
+            for (let i=0; i<notesList.length; i++){
 
-           //console.log(notesList[i]['title'])
-           htmlString += `
+            //console.log(notesList[i]['title'])
+            htmlString += `
                 <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="card">
                         <div class="card-body">
@@ -66,9 +71,46 @@ async function getNotesList(token, page){
                 </div>
               `
             }
-        notesContainer.innerHTML = htmlString
+            notesContainer.innerHTML = htmlString
 
         }
+    
+        }
+        return notesList;
+    } catch (error) {
+        let result = refreshAccessToken(refreshToken)
+            if (result != true){
+                window.location.href = './login.html'
+            }
+            
+        
+    }
+    
+        
+            
+        
+    }
+    
+    
+
+async function refreshAccessToken(refreshToken){
+    let response = await fetch('https://notemy-api.deta.dev/api/v1/auth/token/refresh/',{
+            method: "POST",
+            headers: {
+                "Authorization" : "Bearer " + refreshToken
+            }})
+        //console.log(response)
+    if (response.status == 200){
+        let data = await response.json();
+        //console.log(data.values('access token'))
+        let access_token = await data['access token']
+        //console.log(access_token)
+        console.log(access_token)
+        // refresh access token in cookie
+        document.cookie = await `access_token=${access_token}`;
+        return true;
+    }
+
 }
 
 async function run(){
@@ -80,22 +122,28 @@ async function run(){
             'Login again.',
             'error'
           );
-          try {
-            
-          } catch (error) {
-            
-          }
         window.location.href = './login.html'
-        console.log("token is null")
+        //   try {
+        //     if (!refreshAccessToken(refreshToken)){
+        //         window.location.href = './login.html'
+        //     }
+            
+        //   } catch (error) {
+        //     console.log(error)
+        //   }
+        
     }
     else{
          
-        getNotesList(accessToken, page);
+        let notesList = getNotesList(accessToken, refreshToken, page);
+        return notesList;
     
     
     }
 }
-run()
+const notesList = run()
+
+export const notes = notesList;
 
 
 
