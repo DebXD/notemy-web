@@ -55,12 +55,15 @@ const getMe = async (accessToken) => {
         
         .then( items => {
             //console.log(items)
-            
-            window.location.href = './notes.html'
-            //localStorage.setItem("token", accessToken);
             // Set cookie
             document.cookie= `token=${accessToken}`;
+            // set localstorage
+            //localStorage.setItem("token", accessToken);
             //console.log(localStorage.getItem("token"));
+
+            window.location.href = './notes.html'
+            
+            
             
         })
         

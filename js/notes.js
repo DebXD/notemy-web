@@ -1,21 +1,22 @@
-// let token = localStorage.getItem("token");
-//  Get token from cookie items
+// Get token from cookie items
 const cookieItems = document.cookie.split(';')
-const getToken = () => {
+const getToken = async() => {
     for (let i=0; i<cookieItems.length; i++){
-            let item = cookieItems[i]
+            let item = await cookieItems[i]
         if (item.includes('token')){
-            let tokenArray = item.split('=');
+            let tokenArray = await item.split('=');
             if (tokenArray[1] != undefined){
                 return tokenArray[1];
             }
         }
     }
 }
-const token  = getToken();
-console.log(token)
 
-const notesContainer = document.getElementById("note-container")
+
+// let token = localStorage.getItem("token");
+
+
+const notesContainer = document.getElementById("note-container");
 
 let page = 1;
 
@@ -70,21 +71,25 @@ async function getNotesList(token, page){
         }
 }
 
-
-if (!token){
-    Swal.fire(
-        'Logged out',
-        'Login again.',
-        'error'
-      );
-    window.location.href = './login.html'
-    console.log("token is null")
+async function run(){
+    let token  = await getToken();
+    if (!token){
+        await Swal.fire(
+            'Logged out',
+            'Login again.',
+            'error'
+          );
+        window.location.href = './login.html'
+        console.log("token is null")
+    }
+    else{
+         
+        getNotesList(token, page);
+    
+    
+    }
 }
-else{
-     
-    getNotesList(token, page);
+run()
 
-
-}
 
 
