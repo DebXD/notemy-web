@@ -2,9 +2,9 @@
 const cookieItems = document.cookie.split(';')
 const getToken = async(cookieItemName) => {
     for (let i=0; i<cookieItems.length; i++){
-            let item = await cookieItems[i]
+            let item = cookieItems[i]
         if (item.includes(cookieItemName)){
-            let tokenArray = await item.split('=');
+            let tokenArray = item.split('=');
             if (tokenArray[1] != undefined){
                 return tokenArray[1];
             }
@@ -43,17 +43,20 @@ async function getNotesList(accessToken,refreshToken, page){
                 }
             
                 page ++;
-            }
-        else{
-            
-            let result = refreshAccessToken(refreshToken)
-            if (result != true){
-                window.location.href = './login.html';
-            }
+                }
             else{
-                location.reload();
-            break;
-        }}
+            
+                let result = refreshAccessToken(refreshToken)
+                if (result != true){
+                    console.log('changed access token')
+                    //window.location.href = './notes.html';
+                    break;
+                    }
+                else{
+                    window.location.href = './login.html'
+                    break;
+                }
+                }
 
         if (notesList.length !== 0){
             let htmlString = ''
@@ -76,10 +79,13 @@ async function getNotesList(accessToken,refreshToken, page){
         }
     
         }
-        return notesList;
+        
     } catch (error) {
-        let result = refreshAccessToken(refreshToken)
-            if (result != true){
+        let result = await refreshAccessToken(refreshToken)
+            if (result == true){
+                window.location.href = './notes.html'
+            }
+            else{
                 window.location.href = './login.html'
             }
             
@@ -105,9 +111,10 @@ async function refreshAccessToken(refreshToken){
         //console.log(data.values('access token'))
         let access_token = await data['access token']
         //console.log(access_token)
-        console.log(access_token)
+        //console.log(access_token)
         // refresh access token in cookie
-        document.cookie = await `access_token=${access_token}`;
+        document.cookie = `access_token=${access_token}`;
+        window.location.href = './notes.html'
         return true;
     }
 
@@ -116,6 +123,7 @@ async function refreshAccessToken(refreshToken){
 async function run(){
     let accessToken  = await getToken('access_token');
     let refreshToken = await getToken('refresh_token');
+    //console.log(accessToken)
     if (!accessToken){
         await Swal.fire(
             'Logged out',
@@ -135,15 +143,14 @@ async function run(){
     }
     else{
          
-        let notesList = getNotesList(accessToken, refreshToken, page);
-        return notesList;
+        await getNotesList(accessToken, refreshToken, page);
+        
     
     
     }
 }
-const notesList = run()
+run()
 
-export const notes = notesList;
 
 
 

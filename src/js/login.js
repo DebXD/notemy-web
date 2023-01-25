@@ -21,48 +21,28 @@ const fetchToken = async(loginCredentials) => {
     };
 };
 
-const getMe = async (accessToken) => {
+// const getMe = async (accessToken) => {
 
-    await fetch("https://notemy-api.deta.dev/api/v1/auth/me/",{
-        method : 'GET',
-        headers : {
-            "Authorization" : 'Bearer ' + accessToken
-                    }
-        })
-        .then(res => {
-            if (res.status == 200){
-            //console.log('getting notes json data')
-            Swal.fire(
-                'Good job!',
-                'You have logged in.',
-                'success'
-              );
-                
-            }
-            else{
-                console.log("Error getting userdata")
-            }
-            
-            return res.json();
+//     let res = await fetch("https://notemy-api.deta.dev/api/v1/auth/me/",{
+//         method : 'GET',
+//         headers : {
+//             "Authorization" : 'Bearer ' + accessToken})
 
-        })  
+//     if (res.status == 200){
+//     Swal.fire(
+//         'Good job!',
+//         'You have logged in.',
+//         'success'
+//         );
+//         document.cookie= `token=${accessToken}`;
+//         window.location.href = './notes.html'
         
-        .then( data => {
-            //console.log(data);
-            return data.data;
-        })
-        
-        .then( items => {
+//     }
+//     else{
+//         console.log("Error getting userdata")
+//     }
 
-            document.cookie= `token=${accessToken}`;
-            window.location.href = './notes.html'
-            
-            
-            
-        })
-        
-
-}
+// }
         
 
 const loginBtn = document.getElementById('login-btn')
