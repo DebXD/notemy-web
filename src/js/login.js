@@ -17,7 +17,7 @@ const fetchToken = async(loginCredentials) => {
         document.cookie= `access_token=${accessToken}`;
         document.cookie = `refresh_token=${refreshToken}`;
 
-        window.location.href = './notes.html'
+        window.location.href = '/src/notes.html'
     };
 };
 
