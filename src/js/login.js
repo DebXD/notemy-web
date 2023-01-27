@@ -17,8 +17,8 @@ const fetchToken = async(loginCredentials) => {
         document.cookie= `access_token=${accessToken}`;
         document.cookie = `refresh_token=${refreshToken}`;
         await Swal.fire(
-            'Saved',
-            'Your Note is saved',
+            'Logged in..',
+            'Login Successful',
             'success'
           );
         window.location.href = '/src/notes.html'
