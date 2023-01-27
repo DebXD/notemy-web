@@ -16,34 +16,15 @@ const fetchToken = async(loginCredentials) => {
         // Set cookie
         document.cookie= `access_token=${accessToken}`;
         document.cookie = `refresh_token=${refreshToken}`;
-
+        await Swal.fire(
+            'Saved',
+            'Your Note is saved',
+            'success'
+          );
         window.location.href = '/src/notes.html'
     };
 };
 
-// const getMe = async (accessToken) => {
-
-//     let res = await fetch("https://notemy-api.deta.dev/api/v1/auth/me/",{
-//         method : 'GET',
-//         headers : {
-//             "Authorization" : 'Bearer ' + accessToken})
-
-//     if (res.status == 200){
-//     Swal.fire(
-//         'Good job!',
-//         'You have logged in.',
-//         'success'
-//         );
-//         document.cookie= `token=${accessToken}`;
-//         window.location.href = './notes.html'
-        
-//     }
-//     else{
-//         console.log("Error getting userdata")
-//     }
-
-// }
-        
 
 const loginBtn = document.getElementById('login-btn')
 
@@ -55,7 +36,7 @@ loginBtn.addEventListener('click', () =>{
         email: inputEmail,
         password: inputPassword
     };
-    console.log(loginCredentials)
+    //console.log(loginCredentials)
 
     fetchToken(loginCredentials)
     

@@ -30,14 +30,16 @@ async function getNotesList(accessToken,refreshToken, page){
                 headers: {"Authorization" : "Bearer " + accessToken}});
             if (response.status == 200){
                 const data = await response.json();
-                const arrayData = data.data;
+                const arrayData = await data.data;
+                //console.log(arrayData)
 
                 for (let i=0; i<5; i++){
                     if (arrayData[i]!== undefined){
-                    notesList.push(arrayData[i]);
+                        //console.log(arrayData[i])
+                        notesList.push(arrayData[i]);
                     }
                 }
-                const meta = data.meta;
+                const meta = await data.meta;
                 if (meta['has_next'] == false){
                     break;
                 }
@@ -46,7 +48,7 @@ async function getNotesList(accessToken,refreshToken, page){
                 }
             else{
             
-                let result = refreshAccessToken(refreshToken)
+                let result = await refreshAccessToken(refreshToken)
                 if (result != true){
                     console.log('changed access token')
                     //window.location.href = './notes.html';
@@ -57,11 +59,11 @@ async function getNotesList(accessToken,refreshToken, page){
                     break;
                 }
                 }
-
+        }
         if (notesList.length !== 0){
             let htmlString = ''
-            for (let i=0; i<notesList.length; i++){
-
+            for (let i=notesList.length-1; i>=0; i--){
+            //console.log(notesList.length)
             //console.log(notesList[i]['title'])
             htmlString += `
                 <div class="col-sm-6 col-md-4 col-lg-3">
@@ -78,7 +80,7 @@ async function getNotesList(accessToken,refreshToken, page){
 
         }
     
-        }
+        
         
     } catch (error) {
         let result = await refreshAccessToken(refreshToken)
